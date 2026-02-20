@@ -455,3 +455,7 @@ body {
   margin-bottom: 8px;
 }
 
+.auth-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
