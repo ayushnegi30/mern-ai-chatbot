@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://mern-ai-chatbot-rdo9.onrender.com"
+  baseURL: "https://mern-ai-chatbot-rdo9.onrender.com/api"
 });
 
 // Attach token to every request
