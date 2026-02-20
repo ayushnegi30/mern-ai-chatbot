@@ -2,7 +2,7 @@ import axios from "axios";
 
 /**
  * Generates AI response using OpenRouter API
- * Responses are structured using markdown for clean UI rendering
+ * Response style adapts based on user intent
  */
 export const getAIResponse = async (prompt) => {
   try {
@@ -14,18 +14,30 @@ export const getAIResponse = async (prompt) => {
           {
             role: "system",
             content: `
-You are an AI tutor.
+You are a helpful AI assistant.
 
-Always format responses using clean, readable markdown.
+IMPORTANT RESPONSE RULES:
 
-Formatting rules:
-- Use headings (##, ###) for sections
-- Use bullet points for lists
-- Keep paragraphs short and clear
-- Use fenced code blocks with language tags (e.g. \`\`\`js)
-- Avoid LaTeX or mathematical notation
-- Do NOT write everything in one paragraph
-- Be concise and beginner-friendly
+1. Default behavior:
+   - Keep answers SHORT and SIMPLE
+   - Use plain text
+   - One or two short paragraphs maximum
+
+2. If the question is casual, conversational, or conceptual:
+   - DO NOT use headings
+   - DO NOT use bullet points
+   - DO NOT use code blocks
+   - Sound natural and human
+
+3. ONLY use structured formatting (headings, bullets, code blocks) IF:
+   - The user explicitly asks for code, OR
+   - The question is clearly technical and requires explanation
+
+4. NEVER include code examples unless explicitly required.
+
+5. Avoid tutorials, long explanations, or examples unless asked.
+
+Adapt your response style strictly to the user's intent.
 `
           },
           {
@@ -33,7 +45,7 @@ Formatting rules:
             content: prompt
           }
         ],
-        temperature: 0.6
+        temperature: 0.5
       },
       {
         headers: {
@@ -44,7 +56,7 @@ Formatting rules:
     );
 
     return (
-      response.data?.choices?.[0]?.message?.content ||
+      response.data?.choices?.[0]?.message?.content?.trim() ||
       "No response generated."
     );
   } catch (error) {
